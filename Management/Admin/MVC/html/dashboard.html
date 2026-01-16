@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Admin Panel</title>
+    <link rel="stylesheet" href="../css/admin-style.css">
+</head>
+
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>🛒 Admin Panel</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item active">
+                    <span class="nav-icon">📊</span>
+                    Dashboard
+                </a>
+                <a href="products.html" class="nav-item">
+                    <span class="nav-icon">📦</span>
+                    Products
+                </a>
+                <a href="orders.html" class="nav-item">
+                    <span class="nav-icon">🛍️</span>
+                    Orders
+                </a>
+                <a href="users.html" class="nav-item">
+                    <span class="nav-icon">👥</span>
+                    Users
+                </a>
+                <a href="#" onclick="logout()" class="nav-item">
+                    <span class="nav-icon">🚪</span>
+                    Logout
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <h1>Dashboard</h1>
+                <span class="date-display" id="currentDate"></span>
+            </header>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card stat-blue">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <h3 id="totalUsers">0</h3>
+                        <p>Total Customers</p>
+                    </div>
+                </div>
+
+                <div class="stat-card stat-green">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-info">
+                        <h3 id="totalProducts">0</h3>
+                        <p>Total Products</p>
+                    </div>
+                </div>
+
+                <div class="stat-card stat-purple">
+                    <div class="stat-icon">🛍️</div>
+                    <div class="stat-info">
+                        <h3 id="totalOrders">0</h3>
+                        <p>Total Orders</p>
+                    </div>
+                </div>
+
+                <div class="stat-card stat-orange">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-info">
+                        <h3 id="totalRevenue">$0.00</h3>
+                        <p>Total Revenue</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="dashboard-row">
+                <div class="card quick-actions">
+                    <h2>Quick Actions</h2>
+                    <div class="action-buttons">
+                        <a href="addProduct.html" class="action-btn">
+                            <span>➕</span> Add Product
+                        </a>
+                        <a href="orders.html" class="action-btn">
+                            <span>📋</span> View Orders
+                        </a>
+                        <a href="users.html" class="action-btn">
+                            <span>👥</span> Manage Users
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card pending-info">
+                    <h2>Pending Orders</h2>
+                    <div class="pending-count" id="pendingOrders">0</div>
+                    <p>Orders awaiting processing</p>
+                    <a href="orders.html?status=pending" class="btn btn-primary">View Pending</a>
+                </div>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Recent Orders</h2>
+                    <a href="orders.html" class="btn btn-secondary">View All</a>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentOrdersTable">
+                        <tr>
+                            <td colspan="5" class="text-center">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Load dashboard data
+        document.addEventListener('DOMContentLoaded', function () {
+            loadDashboardData();
+            displayCurrentDate();
+        });
+
+        function loadDashboardData() {
+            fetch('../php/dashboardApi.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update stats
+                        document.getElementById('totalUsers').textContent = data.stats.total_users;
+                        document.getElementById('totalProducts').textContent = data.stats.total_products;
+                        document.getElementById('totalOrders').textContent = data.stats.total_orders;
+                        document.getElementById('totalRevenue').textContent = '$' + parseFloat(data.stats.total_revenue).toFixed(2);
+                        document.getElementById('pendingOrders').textContent = data.stats.pending_orders;
+
+                        // Update recent orders table
+                        updateRecentOrdersTable(data.recent_orders);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading dashboard:', error);
+                });
+        }
+
+        function updateRecentOrdersTable(orders) {
+            const tbody = document.getElementById('recentOrdersTable');
+
+            if (orders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center">No orders yet</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = orders.map(order => `
+                <tr>
+                    <td>#${order.id}</td>
+                    <td>${order.customer_name}</td>
+                    <td>$${parseFloat(order.total_amount).toFixed(2)}</td>
+                    <td><span class="status-badge status-${order.status}">${order.status}</span></td>
+                    <td>${new Date(order.created_at).toLocaleDateString()}</td>
+                </tr>
+            `).join('');
+        }
+
+        function displayCurrentDate() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', options);
+        }
+
+        function logout() {
+            window.location.href = '../../Customer/MVC/html/login.html';
+        }
+    </script>
+</body>
+
+</html>

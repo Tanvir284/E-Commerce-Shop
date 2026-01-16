@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist | E-Shop Bangladesh</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/shop.css">
+    <link rel="stylesheet" href="../css/features.css">
+    <style>
+        .wishlist-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .wishlist-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .wishlist-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .wishlist-count {
+            color: var(--gray-500);
+            font-size: 1rem;
+        }
+
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .wishlist-item {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .wishlist-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .wishlist-item-image {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            background: var(--gray-100);
+            padding: 1rem;
+        }
+
+        .wishlist-item-details {
+            padding: 1.25rem;
+        }
+
+        .wishlist-item-category {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .wishlist-item-name {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0.5rem 0;
+            color: var(--dark);
+        }
+
+        .wishlist-item-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .wishlist-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-add-to-cart {
+            flex: 1;
+            padding: 0.75rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-add-to-cart:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-remove {
+            padding: 0.75rem;
+            background: var(--gray-100);
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-remove:hover {
+            background: #FEE2E2;
+        }
+
+        .empty-wishlist {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-wishlist-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-wishlist h2 {
+            color: var(--gray-600);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-wishlist p {
+            color: var(--gray-400);
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-shop-now {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--primary);
+            color: white;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .btn-shop-now:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .clear-all-btn {
+            padding: 0.5rem 1rem;
+            background: var(--gray-100);
+            border: none;
+            border-radius: var(--radius);
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .clear-all-btn:hover {
+            background: #FEE2E2;
+            color: #EF4444;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🛍️</div>
+                <span>E-Shop</span>
+            </a>
+
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search products...">
+                <button onclick="window.location.href='index.html'">🔍</button>
+            </div>
+
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">🏠 Home</a>
+                <a href="wishlist.html" class="nav-link active wishlist-link">
+                    ❤️ Wishlist
+                    <span class="wishlist-badge" id="wishlistBadge">0</span>
+                </a>
+                <a href="cart.html" class="nav-link cart-link">
+                    🛒 Cart
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </a>
+                <a href="orders.html" class="nav-link">📦 Orders</a>
+                <a href="profile.html" class="nav-link">👤 Profile</a>
+                <a href="login.html" class="btn-login">Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Wishlist Content -->
+    <main class="wishlist-container">
+        <div class="wishlist-header">
+            <div>
+                <h1>❤️ My Wishlist</h1>
+                <p class="wishlist-count" id="wishlistCount">0 items</p>
+            </div>
+            <button class="clear-all-btn" id="clearAllBtn" onclick="clearWishlist()">
+                🗑️ Clear All
+            </button>
+        </div>
+
+        <div class="wishlist-grid" id="wishlistGrid">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>Loading wishlist...</p>
+            </div>
+        </div>
+
+        <div class="empty-wishlist" id="emptyWishlist" style="display: none;">
+            <div class="empty-wishlist-icon">💔</div>
+            <h2>Your wishlist is empty</h2>
+            <p>Save your favorite products here for later</p>
+            <a href="index.html" class="btn-shop-now">Start Shopping</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>🛍️ E-Shop Bangladesh</h3>
+                <p>Your premium destination for quality products.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="index.html">Home</a>
+                <a href="wishlist.html">Wishlist</a>
+                <a href="cart.html">Cart</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 E-Shop Bangladesh</p>
+        </div>
+    </footer>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        let allProducts = [];
+        let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+        document.addEventListener('DOMContentLoaded', function () {
+            loadWishlistProducts();
+            updateBadges();
+        });
+
+        function loadWishlistProducts() {
+            fetch('../php/productsApi.php?action=list')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        allProducts = data.products;
+                        renderWishlist();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading products:', error);
+                });
+        }
+
+        function renderWishlist() {
+            const grid = document.getElementById('wishlistGrid');
+            const empty = document.getElementById('emptyWishlist');
+            const count = document.getElementById('wishlistCount');
+            const clearBtn = document.getElementById('clearAllBtn');
+
+            if (wishlist.length === 0) {
+                grid.style.display = 'none';
+                empty.style.display = 'block';
+                clearBtn.style.display = 'none';
+                count.textContent = '0 items';
+                return;
+            }
+
+            grid.style.display = 'grid';
+            empty.style.display = 'none';
+            clearBtn.style.display = 'block';
+            count.textContent = `${wishlist.length} items`;
+
+            const wishlistProducts = wishlist.map(id =>
+                allProducts.find(p => p.id == id)
+            ).filter(Boolean);
+
+            grid.innerHTML = wishlistProducts.map(product => `
+                <div class="wishlist-item">
+                    <img src="../../../Admin/MVC/images/${product.image}" alt="${product.name}" 
+                         class="wishlist-item-image"
+                         onerror="this.src='https://via.placeholder.com/200'">
+                    <div class="wishlist-item-details">
+                        <span class="wishlist-item-category">${product.category}</span>
+                        <h3 class="wishlist-item-name">${product.name}</h3>
+                        <div class="wishlist-item-price">৳${parseFloat(product.price).toLocaleString()}</div>
+                        <div class="wishlist-actions">
+                            <button class="btn-add-to-cart" onclick="addToCart(${product.id})">
+                                🛒 Add to Cart
+                            </button>
+                            <button class="btn-remove" onclick="removeFromWishlist(${product.id})">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function removeFromWishlist(productId) {
+            wishlist = wishlist.filter(id => id !== productId);
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            renderWishlist();
+            updateBadges();
+            showToast('Removed from wishlist', 'success');
+        }
+
+        function clearWishlist() {
+            if (confirm('Are you sure you want to clear your wishlist?')) {
+                wishlist = [];
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                renderWishlist();
+                updateBadges();
+                showToast('Wishlist cleared', 'success');
+            }
+        }
+
+        function addToCart(productId) {
+            const formData = new FormData();
+            formData.append('product_id', productId);
+            formData.append('quantity', 1);
+
+            fetch('../php/cartApi.php?action=add', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast('✓ Added to cart!', 'success');
+                        document.getElementById('cartBadge').textContent = data.cart_count;
+                    } else {
+                        if (data.redirect) {
+                            showToast('Please login first', 'error');
+                            setTimeout(() => window.location.href = data.redirect, 1500);
+                        } else {
+                            showToast(data.message || 'Error adding to cart', 'error');
+                        }
+                    }
+                });
+        }
+
+        function updateBadges() {
+            document.getElementById('wishlistBadge').textContent = wishlist.length;
+
+            fetch('../php/cartApi.php?action=count')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('cartBadge').textContent = data.count;
+                    }
+                })
+                .catch(() => {
+                    document.getElementById('cartBadge').textContent = '0';
+                });
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + type + ' show';
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+
+</html>

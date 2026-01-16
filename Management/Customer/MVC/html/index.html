@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Shop Bangladesh | Premium Online Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/shop.css">
+    <link rel="stylesheet" href="../css/features.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <!-- Logo -->
+            <a href="index.html" class="logo">
+                <div class="logo-icon">ES</div>
+                <span>E-Shop</span>
+            </a>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search for products..." autocomplete="off">
+                <button onclick="searchProducts()">→</button>
+                <div class="search-suggestions" id="searchSuggestions"></div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link active">Home</a>
+                <a href="wishlist.html" class="nav-link wishlist-link">
+                    Wishlist
+                    <span class="wishlist-badge" id="wishlistBadge">0</span>
+                </a>
+                <a href="cart.html" class="nav-link cart-link">
+                    Cart
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </a>
+                <a href="orders.html" class="nav-link">Orders</a>
+                <a href="profile.html" class="btn-login"
+                    style="margin-left:5px; background: transparent; border: 1px solid var(--primary); color: var(--primary);">Profile</a>
+                <a href="login.html" class="btn-login">Sign In</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">Free Delivery on Orders Over ৳2,000</div>
+            <h1>Discover Premium<br>Products</h1>
+            <p>Explore our curated collection of 200+ products across 25 categories. Quality guaranteed with fast,
+                secure delivery across Bangladesh.</p>
+        </div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+    </section>
+
+    <!-- Flash Sale Section -->
+    <section class="flash-sale-section" id="flashSaleSection">
+        <div class="flash-sale-header">
+            <div class="flash-sale-title">
+                <span class="flash-icon">⚡</span>
+                <h2>Flash Sale</h2>
+                <span class="flash-icon">⚡</span>
+            </div>
+            <div class="countdown-timer" id="countdownTimer">
+                <div class="time-box">
+                    <span class="time-value" id="hours">00</span>
+                    <span class="time-label">Hours</span>
+                </div>
+                <span class="time-separator">:</span>
+                <div class="time-box">
+                    <span class="time-value" id="minutes">00</span>
+                    <span class="time-label">Mins</span>
+                </div>
+                <span class="time-separator">:</span>
+                <div class="time-box">
+                    <span class="time-value" id="seconds">00</span>
+                    <span class="time-label">Secs</span>
+                </div>
+            </div>
+        </div>
+        <div class="flash-sale-products" id="flashSaleProducts">
+            <!-- Flash sale products will be inserted here -->
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Advanced Filters -->
+        <div class="filters-section" id="filtersSection">
+            <div class="filter-toggle" onclick="toggleFilters()">
+                <span>🎛️ Filters</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="filters-panel" id="filtersPanel">
+                <!-- Price Range Filter -->
+                <div class="filter-group">
+                    <h4>Price Range</h4>
+                    <div class="price-range">
+                        <input type="range" id="priceRange" min="0" max="500000" value="500000"
+                            oninput="updatePriceFilter(this.value)">
+                        <div class="price-values">
+                            <span>৳0</span>
+                            <span id="maxPriceLabel">৳500,000</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Rating Filter -->
+                <div class="filter-group">
+                    <h4>Minimum Rating</h4>
+                    <div class="rating-filter">
+                        <button class="rating-btn" onclick="filterByRating(4)">★★★★☆ & up</button>
+                        <button class="rating-btn" onclick="filterByRating(3)">★★★☆☆ & up</button>
+                        <button class="rating-btn active" onclick="filterByRating(0)">All Ratings</button>
+                    </div>
+                </div>
+                <!-- Sort Options -->
+                <div class="filter-group">
+                    <h4>Sort By</h4>
+                    <select id="sortSelect" onchange="sortProducts(this.value)">
+                        <option value="default">Default</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="name-asc">Name: A to Z</option>
+                        <option value="name-desc">Name: Z to A</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Header -->
+        <div class="section-header">
+            <div>
+                <h2 class="section-title" id="sectionTitle">Featured Products</h2>
+                <p class="section-subtitle" id="productCount">Loading products...</p>
+            </div>
+            <!-- Compare Button -->
+            <button class="compare-btn" id="compareBtn" onclick="openComparison()" style="display:none;">
+                📊 Compare (<span id="compareCount">0</span>)
+            </button>
+        </div>
+
+        <!-- Category Pills -->
+        <div class="category-pills" id="categoryPills">
+            <button class="category-pill active" onclick="filterCategory('all', this)">All</button>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid" id="productsGrid">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>Loading products...</p>
+            </div>
+        </div>
+
+        <!-- Recently Viewed Section -->
+        <section class="recently-viewed-section" id="recentlyViewedSection" style="display:none;">
+            <h2 class="section-title">👀 Recently Viewed</h2>
+            <div class="recently-viewed-carousel" id="recentlyViewedCarousel">
+                <!-- Recently viewed products will be inserted here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Product Quick View Modal -->
+    <div class="modal-overlay" id="quickViewModal" onclick="closeQuickView(event)">
+        <div class="quick-view-modal">
+            <button class="modal-close" onclick="closeQuickView()">&times;</button>
+            <div class="quick-view-content">
+                <div class="quick-view-image-container">
+                    <img src="" alt="" class="quick-view-image" id="quickViewImage">
+                    <div class="image-zoom-lens" id="zoomLens"></div>
+                </div>
+                <div class="quick-view-details">
+                    <span class="quick-view-category" id="quickViewCategory"></span>
+                    <h2 class="quick-view-name" id="quickViewName"></h2>
+                    <div class="quick-view-rating" id="quickViewRating"></div>
+                    <p class="quick-view-description" id="quickViewDescription"></p>
+                    <div class="quick-view-price" id="quickViewPrice"></div>
+                    <div class="quick-view-stock" id="quickViewStock"></div>
+                    <div class="quantity-selector">
+                        <button onclick="changeQuantity(-1)">−</button>
+                        <input type="number" id="quickViewQuantity" value="1" min="1" max="99">
+                        <button onclick="changeQuantity(1)">+</button>
+                    </div>
+                    <div class="quick-view-actions">
+                        <button class="btn-add-cart" onclick="addToCartFromModal()">
+                            🛒 Add to Cart
+                        </button>
+                        <button class="btn-add-wishlist" onclick="toggleWishlistFromModal()">
+                            <span id="modalWishlistIcon">🤍</span>
+                        </button>
+                        <button class="btn-compare" onclick="toggleCompareFromModal()">
+                            📊 Compare
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Comparison Modal -->
+    <div class="modal-overlay" id="comparisonModal" onclick="closeComparison(event)">
+        <div class="comparison-modal">
+            <button class="modal-close" onclick="closeComparison()">&times;</button>
+            <h2>📊 Product Comparison</h2>
+            <div class="comparison-table-wrapper">
+                <table class="comparison-table" id="comparisonTable">
+                    <!-- Comparison content will be inserted here -->
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fly to Cart Animation Element -->
+    <div class="fly-to-cart" id="flyToCart"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>E-Shop Bangladesh</h3>
+                <p>Your premium destination for quality products. We deliver happiness across Bangladesh with care and
+                    speed.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="index.html">Home</a>
+                <a href="wishlist.html">Wishlist</a>
+                <a href="cart.html">Cart</a>
+                <a href="orders.html">My Orders</a>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <a href="help.html">Help Center</a>
+                <a href="shipping.html">Shipping Info</a>
+                <a href="returns.html">Returns</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+            <div class="footer-section">
+                <h4>Payment Methods</h4>
+                <a href="#">Cash on Delivery</a>
+                <a href="#">bKash</a>
+                <a href="#">Card Payment</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 E-Shop Bangladesh. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="../js/shop.js"></script>
+    <script src="../js/features.js"></script>
+</body>
+
+</html>

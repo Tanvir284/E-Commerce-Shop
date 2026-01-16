@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart | E-Shop Bangladesh</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/shop.css">
+    <link rel="stylesheet" href="../css/cart.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🛍️</div>
+                <span>E-Shop</span>
+            </a>
+            <div class="search-bar">
+                <input type="text" placeholder="Search products...">
+                <button>🔍</button>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">🏠 Home</a>
+                <a href="cart.html" class="nav-link cart-link active">
+                    🛒 Cart
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </a>
+                <a href="orders.html" class="nav-link">📦 Orders</a>
+                <a href="profile.html" class="nav-link">👤 Profile</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Cart Content -->
+    <main class="cart-page">
+        <h1>🛒 Shopping Cart</h1>
+
+        <div class="cart-layout">
+            <div class="cart-items" id="cartItems">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading cart...</p>
+                </div>
+            </div>
+
+            <div class="cart-summary">
+                <h2>Order Summary</h2>
+                <div class="summary-row">
+                    <span>Items (<span id="itemCount">0</span>)</span>
+                    <span id="subtotal">৳0</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span style="color: var(--accent);">Free</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span id="total">৳0</span>
+                </div>
+                <a href="checkout.html" class="checkout-btn" id="checkoutBtn">
+                    Proceed to Checkout →
+                </a>
+                <a href="index.html" class="continue-link">← Continue Shopping</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>© 2024 E-Shop Bangladesh. Made with ❤️</p>
+        </div>
+    </footer>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', loadCart);
+
+        function loadCart() {
+            fetch('../php/cartApi.php?action=get')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) renderCart(data.items, data.total, data.count);
+                    else if (data.redirect) window.location.href = data.redirect;
+                })
+                .catch(() => {
+                    document.getElementById('cartItems').innerHTML = `
+                        <div class="empty-cart">
+                            <div class="empty-cart-icon">⚠️</div>
+                            <h2>Error loading cart</h2>
+                        </div>`;
+                });
+        }
+
+        function renderCart(items, total, count) {
+            const container = document.getElementById('cartItems');
+            document.getElementById('cartBadge').textContent = count;
+            document.getElementById('itemCount').textContent = count;
+            document.getElementById('subtotal').textContent = '৳' + parseFloat(total).toLocaleString();
+            document.getElementById('total').textContent = '৳' + parseFloat(total).toLocaleString();
+
+            if (!items.length) {
+                container.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">🛒</div>
+                        <h2>Your cart is empty</h2>
+                        <p>Add some products to get started!</p>
+                        <a href="index.html" class="shop-btn">Start Shopping</a>
+                    </div>`;
+                document.getElementById('checkoutBtn').style.display = 'none';
+                return;
+            }
+
+            container.innerHTML = items.map(item => `
+                <div class="cart-item">
+                    <img src="../../../Admin/MVC/images/${item.image}" alt="${item.name}" class="cart-item-image"
+                         onerror="this.src='https://via.placeholder.com/100'">
+                    <div class="cart-item-info">
+                        <h3>${item.name}</h3>
+                        <span class="category">${item.category || 'Product'}</span>
+                        <div class="price">৳${parseFloat(item.price).toLocaleString()}</div>
+                    </div>
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="updateQty(${item.product_id}, ${item.quantity - 1})">−</button>
+                        <input type="number" class="qty-input" value="${item.quantity}" min="1"
+                               onchange="updateQty(${item.product_id}, this.value)">
+                        <button class="qty-btn" onclick="updateQty(${item.product_id}, ${item.quantity + 1})">+</button>
+                    </div>
+                    <div class="cart-item-total">৳${parseFloat(item.subtotal).toLocaleString()}</div>
+                    <button class="remove-btn" onclick="removeItem(${item.product_id})">×</button>
+                </div>
+            `).join('');
+        }
+
+        function updateQty(id, qty) {
+            const formData = new FormData();
+            formData.append('product_id', id);
+            formData.append('quantity', Math.max(0, parseInt(qty)));
+            fetch('../php/cartApi.php?action=update', { method: 'POST', body: formData })
+                .then(r => r.json()).then(() => loadCart());
+        }
+
+        function removeItem(id) {
+            const formData = new FormData();
+            formData.append('product_id', id);
+            fetch('../php/cartApi.php?action=remove', { method: 'POST', body: formData })
+                .then(r => r.json()).then(() => { showToast('Removed'); loadCart(); });
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.className = 'toast show';
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+    </script>
+</body>
+
+</html>

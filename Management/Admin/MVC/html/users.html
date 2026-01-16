@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users - Admin Panel</title>
+    <link rel="stylesheet" href="../css/admin-style.css">
+</head>
+
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>🛒 Admin Panel</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <span class="nav-icon">📊</span>
+                    Dashboard
+                </a>
+                <a href="products.html" class="nav-item">
+                    <span class="nav-icon">📦</span>
+                    Products
+                </a>
+                <a href="orders.html" class="nav-item">
+                    <span class="nav-icon">🛍️</span>
+                    Orders
+                </a>
+                <a href="users.html" class="nav-item active">
+                    <span class="nav-icon">👥</span>
+                    Users
+                </a>
+                <a href="#" onclick="logout()" class="nav-item">
+                    <span class="nav-icon">🚪</span>
+                    Logout
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <h1>Users Management</h1>
+                <span id="userCount" class="badge">0 Users</span>
+            </header>
+
+            <div class="card">
+                <div class="table-controls">
+                    <input type="text" id="searchInput" placeholder="Search users..." class="search-input">
+                </div>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Joined</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable">
+                        <tr>
+                            <td colspan="6" class="text-center">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let allUsers = [];
+
+        document.addEventListener('DOMContentLoaded', function () {
+            loadUsers();
+
+            document.getElementById('searchInput').addEventListener('input', function () {
+                filterUsers(this.value);
+            });
+        });
+
+        function loadUsers() {
+            fetch('../php/usersApi.php?action=list')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        allUsers = data.users;
+                        document.getElementById('userCount').textContent = allUsers.length + ' Users';
+                        renderUsers(allUsers);
+                    }
+                });
+        }
+
+        function renderUsers(users) {
+            const tbody = document.getElementById('usersTable');
+
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">No users found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td>#${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.phone || 'N/A'}</td>
+                    <td>${new Date(user.created_at).toLocaleDateString()}</td>
+                    <td>
+                        <button onclick="deleteUser(${user.id})" class="btn-icon btn-danger-icon" title="Delete">🗑️</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterUsers(query) {
+            const filtered = allUsers.filter(u =>
+                u.name.toLowerCase().includes(query.toLowerCase()) ||
+                u.email.toLowerCase().includes(query.toLowerCase())
+            );
+            renderUsers(filtered);
+        }
+
+        function deleteUser(id) {
+            if (!confirm('Are you sure you want to delete this user?')) return;
+
+            const formData = new FormData();
+            formData.append('id', id);
+
+            fetch('../php/usersApi.php?action=delete', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        loadUsers();
+                    } else {
+                        alert(data.message);
+                    }
+                });
+        }
+
+        function logout() {
+            window.location.href = '../../Customer/MVC/html/login.html';
+        }
+    </script>
+</body>
+
+</html>

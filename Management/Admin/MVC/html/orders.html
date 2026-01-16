@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders - Admin Panel</title>
+    <link rel="stylesheet" href="../css/admin-style.css">
+</head>
+
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>🛒 Admin Panel</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <span class="nav-icon">📊</span>
+                    Dashboard
+                </a>
+                <a href="products.html" class="nav-item">
+                    <span class="nav-icon">📦</span>
+                    Products
+                </a>
+                <a href="orders.html" class="nav-item active">
+                    <span class="nav-icon">🛍️</span>
+                    Orders
+                </a>
+                <a href="users.html" class="nav-item">
+                    <span class="nav-icon">👥</span>
+                    Users
+                </a>
+                <a href="#" onclick="logout()" class="nav-item">
+                    <span class="nav-icon">🚪</span>
+                    Logout
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <h1>Orders Management</h1>
+                <div class="filter-group">
+                    <select id="statusFilter" onchange="filterByStatus()">
+                        <option value="">All Orders</option>
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+            </header>
+
+            <div class="card">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Email</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTable">
+                        <tr>
+                            <td colspan="7" class="text-center">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Order Details Modal -->
+            <div id="orderModal" class="modal">
+                <div class="modal-content">
+                    <span class="modal-close" onclick="closeModal()">&times;</span>
+                    <h2>Order Details</h2>
+                    <div id="orderDetails"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check for status filter in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const status = urlParams.get('status');
+            if (status) {
+                document.getElementById('statusFilter').value = status;
+            }
+            loadOrders();
+        });
+
+        function loadOrders() {
+            const status = document.getElementById('statusFilter').value;
+            const url = status ? `../php/ordersApi.php?action=list&status=${status}` : '../php/ordersApi.php?action=list';
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        renderOrders(data.orders);
+                    }
+                });
+        }
+
+        function renderOrders(orders) {
+            const tbody = document.getElementById('ordersTable');
+
+            if (orders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center">No orders found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = orders.map(order => `
+                <tr>
+                    <td>#${order.id}</td>
+                    <td>${order.customer_name}</td>
+                    <td>${order.customer_email}</td>
+                    <td>$${parseFloat(order.total_amount).toFixed(2)}</td>
+                    <td>
+                        <select onchange="updateStatus(${order.id}, this.value)" class="status-select status-${order.status}">
+                            <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
+                            <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>Processing</option>
+                            <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>Shipped</option>
+                            <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                            <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                        </select>
+                    </td>
+                    <td>${new Date(order.created_at).toLocaleDateString()}</td>
+                    <td>
+                        <button onclick="viewOrder(${order.id})" class="btn-icon" title="View Details">👁️</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterByStatus() {
+            loadOrders();
+        }
+
+        function updateStatus(orderId, status) {
+            const formData = new FormData();
+            formData.append('id', orderId);
+            formData.append('status', status);
+
+            fetch('../php/ordersApi.php?action=updateStatus', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        alert(data.message);
+                        loadOrders();
+                    }
+                });
+        }
+
+        function viewOrder(orderId) {
+            fetch(`../php/ordersApi.php?action=get&id=${orderId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showOrderModal(data.order);
+                    }
+                });
+        }
+
+        function showOrderModal(order) {
+            const modal = document.getElementById('orderModal');
+            const details = document.getElementById('orderDetails');
+
+            details.innerHTML = `
+                <div class="order-info">
+                    <p><strong>Order ID:</strong> #${order.id}</p>
+                    <p><strong>Customer:</strong> ${order.customer_name}</p>
+                    <p><strong>Email:</strong> ${order.customer_email}</p>
+                    <p><strong>Phone:</strong> ${order.customer_phone || 'N/A'}</p>
+                    <p><strong>Shipping Address:</strong> ${order.shipping_address}</p>
+                    <p><strong>Payment:</strong> ${order.payment_method}</p>
+                    <p><strong>Status:</strong> <span class="status-badge status-${order.status}">${order.status}</span></p>
+                </div>
+                <h3>Order Items</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr><th>Product</th><th>Qty</th><th>Price</th><th>Total</th></tr>
+                    </thead>
+                    <tbody>
+                        ${order.items.map(item => `
+                            <tr>
+                                <td>${item.product_name}</td>
+                                <td>${item.quantity}</td>
+                                <td>$${parseFloat(item.price).toFixed(2)}</td>
+                                <td>$${(item.quantity * item.price).toFixed(2)}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                <p class="order-total"><strong>Total: $${parseFloat(order.total_amount).toFixed(2)}</strong></p>
+            `;
+
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('orderModal').style.display = 'none';
+        }
+
+        window.onclick = function (e) {
+            const modal = document.getElementById('orderModal');
+            if (e.target === modal) modal.style.display = 'none';
+        }
+
+        function logout() {
+            window.location.href = '../../Customer/MVC/html/login.html';
+        }
+    </script>
+</body>
+
+</html>

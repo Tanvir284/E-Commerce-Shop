@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center | E-Shop Bangladesh</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/shop.css">
+    <link rel="stylesheet" href="../css/features.css">
+    <style>
+        .page-hero {
+            background: var(--gradient-primary);
+            padding: 4rem 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .page-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-hero p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .support-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .faq-section {
+            margin-bottom: 3rem;
+        }
+
+        .faq-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .faq-item {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.25rem 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .faq-question:hover {
+            background: var(--gray-100);
+        }
+
+        .faq-question .icon {
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question .icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+
+        .faq-answer-content {
+            padding: 0 1.5rem 1.5rem;
+            color: var(--gray-600);
+            line-height: 1.8;
+        }
+
+        .contact-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .contact-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-card);
+            transition: var(--transition);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .contact-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .contact-card p {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+        }
+
+        .contact-card a {
+            color: var(--primary);
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🛍️</div>
+                <span>E-Shop</span>
+            </a>
+            <div class="search-bar">
+                <input type="text" placeholder="Search help topics...">
+                <button>🔍</button>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">🏠 Home</a>
+                <a href="cart.html" class="nav-link cart-link">🛒 Cart <span class="cart-badge"
+                        id="cartBadge">0</span></a>
+                <a href="login.html" class="btn-login">Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <h1>📚 Help Center</h1>
+        <p>Find answers to your questions</p>
+    </section>
+
+    <!-- Content -->
+    <main class="support-container">
+        <!-- Quick Contact -->
+        <div class="contact-cards">
+            <div class="contact-card">
+                <div class="icon">📞</div>
+                <h3>Call Us</h3>
+                <p><a href="tel:+8801712345678">+880 1712-345678</a></p>
+                <p>9 AM - 9 PM (Everyday)</p>
+            </div>
+            <div class="contact-card">
+                <div class="icon">💬</div>
+                <h3>Live Chat</h3>
+                <p>Chat with our support team</p>
+                <p><a href="#">Start Chat</a></p>
+            </div>
+            <div class="contact-card">
+                <div class="icon">📧</div>
+                <h3>Email Us</h3>
+                <p><a href="mailto:support@eshop.bd">support@eshop.bd</a></p>
+                <p>Reply within 24 hours</p>
+            </div>
+        </div>
+
+        <!-- FAQ Sections -->
+        <section class="faq-section">
+            <h2>🛒 Orders & Payment</h2>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How do I place an order?</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Placing an order is easy! Simply browse our products, add items to your cart, and proceed to
+                            checkout. You can pay using Cash on Delivery, bKash, or Card Payment. Once your order is
+                            confirmed, you'll receive an SMS and email with tracking details.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What payment methods do you accept?</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>We accept multiple payment options:</p>
+                        <ul>
+                            <li><strong>Cash on Delivery (COD)</strong> - Pay when you receive your order</li>
+                            <li><strong>bKash</strong> - Mobile payment (Merchant: 01712345678)</li>
+                            <li><strong>Card Payment</strong> - Visa, Mastercard, AMEX</li>
+                            <li><strong>Bank Transfer</strong> - DBBL, Brac Bank, City Bank</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How can I track my order?</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>You can track your order by:</p>
+                        <ol>
+                            <li>Logging into your account and visiting "My Orders"</li>
+                            <li>Using the tracking link sent via SMS/Email</li>
+                            <li>Contacting our support team with your order ID</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-section">
+            <h2>🚚 Shipping & Delivery</h2>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What are the delivery charges?</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Our delivery charges are:</p>
+                        <ul>
+                            <li><strong>Inside Dhaka:</strong> ৳60</li>
+                            <li><strong>Outside Dhaka:</strong> ৳120</li>
+                            <li><strong>Free Delivery:</strong> Orders above ৳2,000</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How long does delivery take?</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>Delivery times vary by location:</p>
+                        <ul>
+                            <li><strong>Inside Dhaka:</strong> 1-2 business days</li>
+                            <li><strong>Outside Dhaka:</strong> 3-5 business days</li>
+                            <li><strong>Remote Areas:</strong> 5-7 business days</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-section">
+            <h2>↩️ Returns & Refunds</h2>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What is your return policy?</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        <p>We offer a 7-day return policy on most items. Products must be:</p>
+                        <ul>
+                            <li>Unused and in original packaging</li>
+                            <li>With all tags and accessories intact</li>
+                            <li>Not on the non-returnable list (perishables, undergarments, etc.)</li>
+                        </ul>
+                        <p>Visit our <a href="returns.html">Returns page</a> for more details.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>🛍️ E-Shop Bangladesh</h3>
+                <p>Your premium destination for quality products.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="index.html">Home</a>
+                <a href="cart.html">Cart</a>
+                <a href="orders.html">My Orders</a>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <a href="help.html">Help Center</a>
+                <a href="shipping.html">Shipping Info</a>
+                <a href="returns.html">Returns</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 E-Shop Bangladesh</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFAQ(element) {
+            const faqItem = element.parentElement;
+            faqItem.classList.toggle('active');
+        }
+    </script>
+</body>
+
+</html>

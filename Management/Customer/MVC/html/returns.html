@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Returns & Refunds | E-Shop Bangladesh</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/shop.css">
+    <link rel="stylesheet" href="../css/features.css">
+    <style>
+        .page-hero {
+            background: var(--gradient-primary);
+            padding: 4rem 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .page-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-hero p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .content-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .info-card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .info-card h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .policy-highlight {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .policy-item {
+            background: var(--gray-100);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            text-align: center;
+        }
+
+        .policy-item .icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .policy-item h3 {
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .policy-item p {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .step-timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .step-timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gray-200);
+        }
+
+        .timeline-step {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .timeline-step::before {
+            content: '';
+            position: absolute;
+            left: -2.5rem;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timeline-step h4 {
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-step p {
+            color: var(--gray-600);
+            line-height: 1.7;
+        }
+
+        .return-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .return-table th,
+        .return-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .return-table th {
+            background: var(--gray-100);
+            font-weight: 600;
+        }
+
+        .status-yes {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .status-no {
+            color: #EF4444;
+            font-weight: 600;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(234, 88, 12, 0.1));
+            border-left: 4px solid var(--accent-secondary);
+            padding: 1.5rem;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            margin: 1.5rem 0;
+        }
+
+        .warning-box h3 {
+            color: var(--accent-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .refund-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .refund-method {
+            background: var(--gray-100);
+            padding: 1.25rem;
+            border-radius: var(--radius);
+            text-align: center;
+        }
+
+        .refund-method .icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .refund-method strong {
+            display: block;
+            color: var(--dark);
+        }
+
+        .refund-method span {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🛍️</div>
+                <span>E-Shop</span>
+            </a>
+            <div class="search-bar">
+                <input type="text" placeholder="Search products...">
+                <button>🔍</button>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">🏠 Home</a>
+                <a href="cart.html" class="nav-link cart-link">🛒 Cart <span class="cart-badge">0</span></a>
+                <a href="login.html" class="btn-login">Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <h1>↩️ Returns & Refunds</h1>
+        <p>Hassle-free returns for your peace of mind</p>
+    </section>
+
+    <!-- Content -->
+    <main class="content-container">
+        <!-- Policy Highlights -->
+        <div class="policy-highlight">
+            <div class="policy-item">
+                <div class="icon">📅</div>
+                <h3>7-Day Returns</h3>
+                <p>Return within 7 days of delivery</p>
+            </div>
+            <div class="policy-item">
+                <div class="icon">💯</div>
+                <h3>100% Refund</h3>
+                <p>Full refund for eligible items</p>
+            </div>
+            <div class="policy-item">
+                <div class="icon">🚚</div>
+                <h3>Free Pickup</h3>
+                <p>We'll collect from your doorstep</p>
+            </div>
+            <div class="policy-item">
+                <div class="icon">⚡</div>
+                <h3>Fast Processing</h3>
+                <p>Refund within 3-5 business days</p>
+            </div>
+        </div>
+
+        <!-- Return Eligibility -->
+        <div class="info-card">
+            <h2>✅ Return Eligibility</h2>
+            <p>To be eligible for a return, your item must be:</p>
+            <ul style="margin: 1rem 0; padding-left: 1.5rem; color: var(--gray-600); line-height: 2;">
+                <li>Within 7 days of delivery date</li>
+                <li>Unused and in the same condition you received it</li>
+                <li>In the original packaging with tags attached</li>
+                <li>With proof of purchase (order confirmation email or invoice)</li>
+            </ul>
+
+            <table class="return-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Returnable</th>
+                        <th>Conditions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Electronics</td>
+                        <td class="status-yes">✓ Yes</td>
+                        <td>Unopened, sealed packaging</td>
+                    </tr>
+                    <tr>
+                        <td>Clothing & Fashion</td>
+                        <td class="status-yes">✓ Yes</td>
+                        <td>Unworn, tags attached</td>
+                    </tr>
+                    <tr>
+                        <td>Shoes & Footwear</td>
+                        <td class="status-yes">✓ Yes</td>
+                        <td>Unworn, original box</td>
+                    </tr>
+                    <tr>
+                        <td>Beauty & Personal Care</td>
+                        <td class="status-no">✗ No</td>
+                        <td>Non-returnable for hygiene</td>
+                    </tr>
+                    <tr>
+                        <td>Undergarments</td>
+                        <td class="status-no">✗ No</td>
+                        <td>Non-returnable for hygiene</td>
+                    </tr>
+                    <tr>
+                        <td>Groceries & Food</td>
+                        <td class="status-no">✗ No</td>
+                        <td>Perishable items</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Return Process -->
+        <div class="info-card">
+            <h2>📋 How to Return</h2>
+            <div class="step-timeline">
+                <div class="timeline-step">
+                    <h4>1. Initiate Return Request</h4>
+                    <p>Go to "My Orders" → Select the order → Click "Return Item". Fill out the return reason and
+                        submit.</p>
+                </div>
+                <div class="timeline-step">
+                    <h4>2. Approval</h4>
+                    <p>Our team will review your request within 24 hours. You'll receive confirmation via email/SMS.</p>
+                </div>
+                <div class="timeline-step">
+                    <h4>3. Pack Your Item</h4>
+                    <p>Pack the item securely in its original packaging. Include all accessories, manuals, and tags.</p>
+                </div>
+                <div class="timeline-step">
+                    <h4>4. Pickup/Drop-off</h4>
+                    <p>Schedule a free pickup from your address, or drop off at any Sundarban Courier branch.</p>
+                </div>
+                <div class="timeline-step">
+                    <h4>5. Refund Processed</h4>
+                    <p>Once we receive and inspect the item, your refund will be processed within 3-5 business days.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Refund Methods -->
+        <div class="info-card">
+            <h2>💰 Refund Methods</h2>
+            <p>Refunds are processed to your original payment method:</p>
+            <div class="refund-methods">
+                <div class="refund-method">
+                    <div class="icon">📱</div>
+                    <strong>bKash</strong>
+                    <span>Within 24 hours</span>
+                </div>
+                <div class="refund-method">
+                    <div class="icon">💳</div>
+                    <strong>Card Payment</strong>
+                    <span>5-7 business days</span>
+                </div>
+                <div class="refund-method">
+                    <div class="icon">🏦</div>
+                    <strong>Bank Transfer</strong>
+                    <span>3-5 business days</span>
+                </div>
+                <div class="refund-method">
+                    <div class="icon">💵</div>
+                    <strong>Cash (COD)</strong>
+                    <span>bKash/Bank transfer</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Damaged Items -->
+        <div class="info-card">
+            <h2>📦 Damaged or Wrong Items?</h2>
+            <div class="warning-box">
+                <h3>⚠️ Important</h3>
+                <p>If you received a damaged, defective, or wrong item, please report within 48 hours of delivery. Take
+                    photos of the damage and contact our support team immediately.</p>
+            </div>
+            <p>For damaged items, we offer:</p>
+            <ul style="margin: 1rem 0; padding-left: 1.5rem; color: var(--gray-600); line-height: 2;">
+                <li><strong>Free replacement</strong> - Get a new item shipped immediately</li>
+                <li><strong>Full refund</strong> - If replacement is not available</li>
+                <li><strong>Partial refund</strong> - For minor defects if you choose to keep the item</li>
+            </ul>
+            <p style="margin-top: 1rem;">
+                <strong>Contact:</strong> 📞 +880 1712-345678 | 📧 returns@eshop.bd
+            </p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>🛍️ E-Shop Bangladesh</h3>
+                <p>Your premium destination for quality products.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="index.html">Home</a>
+                <a href="cart.html">Cart</a>
+                <a href="orders.html">My Orders</a>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <a href="help.html">Help Center</a>
+                <a href="shipping.html">Shipping Info</a>
+                <a href="returns.html">Returns</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 E-Shop Bangladesh</p>
+        </div>
+    </footer>
+</body>
+
+</html>
