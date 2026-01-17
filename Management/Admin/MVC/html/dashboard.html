@@ -75,7 +75,7 @@
                 <div class="stat-card stat-orange">
                     <div class="stat-icon">💰</div>
                     <div class="stat-info">
-                        <h3 id="totalRevenue">$0.00</h3>
+                        <h3 id="totalRevenue">৳0.00</h3>
                         <p>Total Revenue</p>
                     </div>
                 </div>
@@ -148,7 +148,7 @@
                         document.getElementById('totalUsers').textContent = data.stats.total_users;
                         document.getElementById('totalProducts').textContent = data.stats.total_products;
                         document.getElementById('totalOrders').textContent = data.stats.total_orders;
-                        document.getElementById('totalRevenue').textContent = '$' + parseFloat(data.stats.total_revenue).toFixed(2);
+                        document.getElementById('totalRevenue').textContent = '৳' + parseFloat(data.stats.total_revenue).toFixed(2);
                         document.getElementById('pendingOrders').textContent = data.stats.pending_orders;
 
                         // Update recent orders table
@@ -172,7 +172,7 @@
                 <tr>
                     <td>#${order.id}</td>
                     <td>${order.customer_name}</td>
-                    <td>$${parseFloat(order.total_amount).toFixed(2)}</td>
+                    <td>৳${parseFloat(order.total_amount).toFixed(2)}</td>
                     <td><span class="status-badge status-${order.status}">${order.status}</span></td>
                     <td>${new Date(order.created_at).toLocaleDateString()}</td>
                 </tr>

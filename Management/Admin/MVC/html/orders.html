@@ -124,7 +124,7 @@
                     <td>#${order.id}</td>
                     <td>${order.customer_name}</td>
                     <td>${order.customer_email}</td>
-                    <td>$${parseFloat(order.total_amount).toFixed(2)}</td>
+                    <td>৳${parseFloat(order.total_amount).toFixed(2)}</td>
                     <td>
                         <select onchange="updateStatus(${order.id}, this.value)" class="status-select status-${order.status}">
                             <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
@@ -198,13 +198,13 @@
                             <tr>
                                 <td>${item.product_name}</td>
                                 <td>${item.quantity}</td>
-                                <td>$${parseFloat(item.price).toFixed(2)}</td>
-                                <td>$${(item.quantity * item.price).toFixed(2)}</td>
+                                <td>৳${parseFloat(item.price).toFixed(2)}</td>
+                                <td>৳${(item.quantity * item.price).toFixed(2)}</td>
                             </tr>
                         `).join('')}
                     </tbody>
                 </table>
-                <p class="order-total"><strong>Total: $${parseFloat(order.total_amount).toFixed(2)}</strong></p>
+                <p class="order-total"><strong>Total: ৳${parseFloat(order.total_amount).toFixed(2)}</strong></p>
             `;
 
             modal.style.display = 'block';
