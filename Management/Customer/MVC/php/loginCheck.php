@@ -57,7 +57,7 @@ try {
         
         // Redirect based on role
         if ($result['user']['role'] === 'admin') {
-            header("Location: ../../Admin/MVC/html/dashboard.html");
+            header("Location: /Management/Admin/MVC/html/dashboard.html");
         } else {
             header("Location: ../html/index.html");
         }
