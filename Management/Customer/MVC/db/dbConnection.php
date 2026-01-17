@@ -13,17 +13,24 @@ class Database {
     private static $instance = null;
     private $connection;
     
-    // Database Configuration
-    private $host = 'localhost';
-    private $username = 'root';
-    private $password = '';
-    private $database = 'ecommerce_db';
-    private $port = 3306;
+    // Database Configuration - Uses Railway env vars with localhost fallback
+    private $host;
+    private $username;
+    private $password;
+    private $database;
+    private $port;
     
     /**
      * Private constructor - Singleton pattern
      */
     private function __construct() {
+        // Railway environment variables (with localhost fallback for local dev)
+        $this->host = getenv('MYSQLHOST') ?: 'localhost';
+        $this->username = getenv('MYSQLUSER') ?: 'root';
+        $this->password = getenv('MYSQLPASSWORD') ?: '';
+        $this->database = getenv('MYSQLDATABASE') ?: 'ecommerce_db';
+        $this->port = getenv('MYSQLPORT') ?: 3306;
+        
         $this->connect();
     }
     
