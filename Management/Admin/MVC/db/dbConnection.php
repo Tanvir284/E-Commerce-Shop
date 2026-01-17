@@ -14,16 +14,35 @@ class Database {
     private $connection;
     
     // Database Configuration
-    private $host = 'localhost';
-    private $username = 'root';
-    private $password = '';
-    private $database = 'ecommerce_db';
-    private $port = 3306;
+    private $host;
+    private $username;
+    private $password;
+    private $database;
+    private $port;
     
     /**
      * Private constructor - Singleton pattern
      */
     private function __construct() {
+        // Detect if running on Railway (check for RAILWAY_ENVIRONMENT)
+        $isRailway = isset($_ENV['RAILWAY_ENVIRONMENT']) || getenv('RAILWAY_ENVIRONMENT');
+        
+        if ($isRailway) {
+            // Railway internal MySQL connection
+            $this->host = 'mysql.railway.internal';
+            $this->username = 'root';
+            $this->password = 'HgjaKBquYftmzkOagsOvtEUSCkuWeDvK';
+            $this->database = 'railway';
+            $this->port = 3306;
+        } else {
+            // Local development (XAMPP)
+            $this->host = 'localhost';
+            $this->username = 'root';
+            $this->password = '';
+            $this->database = 'ecommerce_db';
+            $this->port = 3306;
+        }
+        
         $this->connect();
     }
     
