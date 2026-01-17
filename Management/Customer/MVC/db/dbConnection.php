@@ -24,13 +24,25 @@ class Database {
      * Private constructor - Singleton pattern
      */
     private function __construct() {
-        // Railway environment variables (with localhost fallback for local dev)
-        // Try multiple ways to get env vars (different PHP configs handle this differently)
-        $this->host = $_ENV['MYSQLHOST'] ?? getenv('MYSQLHOST') ?: 'localhost';
-        $this->username = $_ENV['MYSQLUSER'] ?? getenv('MYSQLUSER') ?: 'root';
-        $this->password = $_ENV['MYSQLPASSWORD'] ?? getenv('MYSQLPASSWORD') ?: '';
-        $this->database = $_ENV['MYSQLDATABASE'] ?? getenv('MYSQLDATABASE') ?: 'ecommerce_db';
-        $this->port = $_ENV['MYSQLPORT'] ?? getenv('MYSQLPORT') ?: 3306;
+        // Detect if running on Railway (check for RAILWAY_ENVIRONMENT)
+        $isRailway = isset($_ENV['RAILWAY_ENVIRONMENT']) || getenv('RAILWAY_ENVIRONMENT');
+        
+        if ($isRailway) {
+            // Railway internal MySQL connection
+            // MySQL service is accessible at mysql.railway.internal on port 3306
+            $this->host = 'mysql.railway.internal';
+            $this->username = 'root';
+            $this->password = 'HgjaKBquYftmzkOagsOvtEUSCkuWeDvK';
+            $this->database = 'railway';
+            $this->port = 3306;
+        } else {
+            // Local development (XAMPP)
+            $this->host = 'localhost';
+            $this->username = 'root';
+            $this->password = '';
+            $this->database = 'ecommerce_db';
+            $this->port = 3306;
+        }
         
         $this->connect();
     }
