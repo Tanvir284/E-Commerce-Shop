@@ -25,11 +25,12 @@ class Database {
      */
     private function __construct() {
         // Railway environment variables (with localhost fallback for local dev)
-        $this->host = getenv('MYSQLHOST') ?: 'localhost';
-        $this->username = getenv('MYSQLUSER') ?: 'root';
-        $this->password = getenv('MYSQLPASSWORD') ?: '';
-        $this->database = getenv('MYSQLDATABASE') ?: 'ecommerce_db';
-        $this->port = getenv('MYSQLPORT') ?: 3306;
+        // Try multiple ways to get env vars (different PHP configs handle this differently)
+        $this->host = $_ENV['MYSQLHOST'] ?? getenv('MYSQLHOST') ?: 'localhost';
+        $this->username = $_ENV['MYSQLUSER'] ?? getenv('MYSQLUSER') ?: 'root';
+        $this->password = $_ENV['MYSQLPASSWORD'] ?? getenv('MYSQLPASSWORD') ?: '';
+        $this->database = $_ENV['MYSQLDATABASE'] ?? getenv('MYSQLDATABASE') ?: 'ecommerce_db';
+        $this->port = $_ENV['MYSQLPORT'] ?? getenv('MYSQLPORT') ?: 3306;
         
         $this->connect();
     }
