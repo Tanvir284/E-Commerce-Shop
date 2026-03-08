@@ -39,31 +39,54 @@ if (!empty($errors)) {
     exit();
 }
 
-// Attempt login
+// Attempt login - MOCK FOR UI TESTING
 try {
-    $userModel = new UserModel();
-    $result = $userModel->verifyLogin($email, $password);
-    
-    if ($result['success']) {
+    // Hardcoded mock user to bypass DB connection error for testing
+    $mockUser = null;
+    $success = false;
+    $message = '';
+
+    if ($email === 'test@example.com' && $password === 'password') {
+        $success = true;
+        $mockUser = [
+            'id' => 1,
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'role' => 'customer'
+        ];
+    } elseif ($email === 'admin@example.com' && $password === 'admin') {
+        $success = true;
+        $mockUser = [
+            'id' => 2,
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
+            'role' => 'admin'
+        ];
+    } else {
+        $success = false;
+        $message = 'Invalid email or password (Mock data requires test@example.com / password)';
+    }
+
+    if ($success) {
         // Clear errors
         unset($_SESSION['login_errors']);
         
         // Store user data in session
-        $_SESSION['user_id'] = $result['user']['id'];
-        $_SESSION['user_name'] = $result['user']['name'];
-        $_SESSION['user_email'] = $result['user']['email'];
-        $_SESSION['user_role'] = $result['user']['role'];
+        $_SESSION['user_id'] = $mockUser['id'];
+        $_SESSION['user_name'] = $mockUser['name'];
+        $_SESSION['user_email'] = $mockUser['email'];
+        $_SESSION['user_role'] = $mockUser['role'];
         $_SESSION['logged_in'] = true;
         
         // Redirect based on role
-        if ($result['user']['role'] === 'admin') {
+        if ($mockUser['role'] === 'admin') {
             header("Location: /Management/Admin/MVC/html/dashboard.html");
         } else {
             header("Location: ../html/index.html");
         }
         exit();
     } else {
-        $_SESSION['login_errors'] = [$result['message']];
+        $_SESSION['login_errors'] = [$message];
         header("Location: ../html/login.html?error=credentials");
         exit();
     }

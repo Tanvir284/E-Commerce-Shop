@@ -7,6 +7,7 @@ let allProducts = [];
 let displayedProducts = [];
 
 document.addEventListener('DOMContentLoaded', function () {
+    checkAuthState();
     loadProducts();
     loadCategories();
     updateCartBadge();
@@ -16,6 +17,38 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.key === 'Enter') searchProducts();
     });
 });
+
+/**
+ * Check Authentication State
+ */
+function checkAuthState() {
+    fetch('../php/authApi.php?action=check')
+        .then(response => response.json())
+        .then(data => {
+            const loginBtns = document.querySelectorAll('.btn-login');
+            if (data.logged_in) {
+                // Hide Sign In
+                loginBtns.forEach(btn => {
+                    if (btn.textContent.includes('Sign In')) btn.style.display = 'none';
+                    if (btn.textContent.includes('Profile')) btn.style.display = 'inline-block';
+                });
+            } else {
+                // Hide Profile
+                loginBtns.forEach(btn => {
+                    if (btn.textContent.includes('Sign In')) btn.style.display = 'inline-block';
+                    if (btn.textContent.includes('Profile')) btn.style.display = 'none';
+                });
+            }
+        })
+        .catch(() => {
+            // Default to not logged in
+            const loginBtns = document.querySelectorAll('.btn-login');
+            loginBtns.forEach(btn => {
+                if (btn.textContent.includes('Sign In')) btn.style.display = 'inline-block';
+                if (btn.textContent.includes('Profile')) btn.style.display = 'none';
+            });
+        });
+}
 
 /**
  * Load products

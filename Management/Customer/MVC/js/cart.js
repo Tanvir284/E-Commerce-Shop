@@ -73,11 +73,11 @@ function renderCart(items, total, count) {
             </div>
             <div class="quantity-control">
                 <button class="quantity-btn" onclick="updateQuantity(${item.product_id}, ${item.quantity - 1})">−</button>
-                <input type="number" class="quantity-input" value="${item.quantity}" min="1" max="${item.stock}"
+                <input type="number" class="quantity-input" value="${item.quantity}" min="1" max="${item.stock || 99}"
                        onchange="updateQuantity(${item.product_id}, this.value)">
                 <button class="quantity-btn" onclick="updateQuantity(${item.product_id}, ${item.quantity + 1})">+</button>
             </div>
-            <div class="cart-item-total">$${parseFloat(item.subtotal).toFixed(2)}</div>
+            <div class="cart-item-total">৳${(parseFloat(item.price) * parseInt(item.quantity)).toFixed(2)}</div>
             <button class="remove-btn" onclick="removeItem(${item.product_id})" title="Remove">×</button>
         </div>
     `).join('');

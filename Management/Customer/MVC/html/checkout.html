@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/shop.css">
     <link rel="stylesheet" href="../css/checkout.css">
+    <script src="../js/theme.js"></script>
 </head>
 
 <body>
@@ -22,6 +23,8 @@
                 🔒 Secure Checkout
             </div>
             <nav class="nav-links">
+                <button class="btn btn-outline theme-toggle"
+                    style="margin-right: 12px; border: none; padding: 6px 12px; cursor: pointer;">🌙 Night Mode</button>
                 <a href="cart.html" class="nav-link">← Back to Cart</a>
             </nav>
         </div>
@@ -153,16 +156,25 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            checkAuthState();
             loadSummary();
             document.getElementById('checkoutForm').addEventListener('submit', placeOrder);
         });
+
+        function checkAuthState() {
+            fetch('../php/authApi.php?action=check')
+                .then(r => r.json())
+                .then(data => {
+                    if (!data.logged_in) window.location.href = 'login.html';
+                });
+        }
 
         function loadSummary() {
             fetch('../php/cartApi.php?action=get')
                 .then(r => r.json())
                 .then(data => {
                     if (data.success) {
-                        if (!data.items.length) { window.location.href = 'cart.html'; return; }
+                        if (!data.items || data.items.length === 0) { window.location.href = 'cart.html'; return; }
                         renderSummary(data.items, data.total);
                     } else if (data.redirect) window.location.href = data.redirect;
                 });
@@ -171,16 +183,18 @@
         function renderSummary(items, total) {
             document.getElementById('subtotal').textContent = '৳' + parseFloat(total).toLocaleString();
             document.getElementById('total').textContent = '৳' + parseFloat(total).toLocaleString();
-            document.getElementById('orderItems').innerHTML = items.map(i => `
+            document.getElementById('orderItems').innerHTML = items.map(i => {
+                const itemSubtotal = parseFloat(i.price) * parseInt(i.quantity);
+                return `
                 <div class="order-item">
                     <img src="../../../Admin/MVC/images/${i.image}" onerror="this.src='https://via.placeholder.com/50'">
                     <div class="order-item-info">
                         <h4>${i.name}</h4>
                         <span>Qty: ${i.quantity}</span>
                     </div>
-                    <div class="order-item-price">৳${parseFloat(i.subtotal).toLocaleString()}</div>
+                    <div class="order-item-price">৳${itemSubtotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                 </div>
-            `).join('');
+            `}).join('');
         }
 
         function placeOrder(e) {

@@ -1,20 +1,20 @@
 <?php
 /**
- * Users API
+ * Users API - MOCKED for UI Testing
  * JSON API for user management
  */
 
 header('Content-Type: application/json');
 session_start();
 
-require_once __DIR__ . '/../db/userModel.php';
-
-$userModel = new UserModel();
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 
 switch ($action) {
     case 'list':
-        $users = $userModel->getAllUsers();
+        $users = [
+            ['id' => 1, 'name' => 'Admin User', 'email' => 'admin@example.com', 'role' => 'admin', 'created_at' => '2024-01-01'],
+            ['id' => 2, 'name' => 'Test User', 'email' => 'test@example.com', 'role' => 'customer', 'created_at' => '2024-03-05']
+        ];
         echo json_encode(['success' => true, 'users' => $users]);
         break;
         
@@ -24,12 +24,7 @@ switch ($action) {
             break;
         }
         $id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
-        $result = $userModel->deleteUser($id);
-        if ($result) {
-            echo json_encode(['success' => true, 'message' => 'User deleted']);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Failed to delete']);
-        }
+        echo json_encode(['success' => true, 'message' => 'User deleted (mocked)']);
         break;
         
     default:

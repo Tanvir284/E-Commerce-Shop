@@ -12,7 +12,7 @@
 .checkout-page h1 {
     font-size: 1.75rem;
     font-weight: 700;
-    color: var(--dark);
+    color: var(--text-primary);
     margin-bottom: 2rem;
 }
 
@@ -25,9 +25,10 @@
 
 /* Checkout Section */
 .checkout-section {
-    background: var(--white);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-sm);
     padding: 2rem;
     margin-bottom: 1.5rem;
 }
@@ -35,10 +36,10 @@
 .checkout-section h2 {
     font-size: 1.1rem;
     font-weight: 700;
-    color: var(--dark);
+    color: var(--text-primary);
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -60,7 +61,7 @@
     display: block;
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--gray-600);
+    color: var(--text-secondary);
     margin-bottom: 6px;
 }
 
@@ -69,7 +70,9 @@
 .form-group textarea {
     width: 100%;
     padding: 0.75rem 1rem;
-    border: 2px solid var(--gray-200);
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
     border-radius: var(--radius);
     font-size: 0.95rem;
     transition: var(--transition);
@@ -80,7 +83,8 @@
 .form-group textarea:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    background: var(--bg-tertiary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 /* Payment Options */
@@ -103,14 +107,15 @@
     align-items: center;
     gap: 1rem;
     padding: 1rem 1.25rem;
-    border: 2px solid var(--gray-200);
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
     border-radius: var(--radius);
     transition: var(--transition);
 }
 
 .payment-option input:checked+.payment-label {
     border-color: var(--primary);
-    background: rgba(99, 102, 241, 0.05);
+    background: rgba(37, 99, 235, 0.1);
 }
 
 .payment-icon {
@@ -120,19 +125,20 @@
 .payment-info h4 {
     font-size: 0.95rem;
     font-weight: 600;
-    color: var(--dark);
+    color: var(--text-primary);
 }
 
 .payment-info p {
     font-size: 0.8rem;
-    color: var(--gray-400);
+    color: var(--text-secondary);
 }
 
 /* Order Summary */
 .checkout-summary {
-    background: var(--white);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-sm);
     padding: 1.5rem;
     position: sticky;
     top: 100px;
@@ -141,9 +147,10 @@
 .checkout-summary h2 {
     font-size: 1.1rem;
     font-weight: 700;
+    color: var(--text-primary);
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .order-items {
@@ -156,7 +163,7 @@
     display: flex;
     gap: 10px;
     padding: 0.75rem 0;
-    border-bottom: 1px solid var(--gray-100);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .order-item:last-child {
@@ -167,7 +174,7 @@
     width: 50px;
     height: 50px;
     object-fit: contain;
-    background: var(--gray-100);
+    background: var(--bg-tertiary);
     border-radius: var(--radius-sm);
 }
 
@@ -182,12 +189,12 @@
 
 .order-item-info span {
     font-size: 0.75rem;
-    color: var(--gray-400);
+    color: var(--text-secondary);
 }
 
 .order-item-price {
     font-weight: 600;
-    color: var(--primary);
+    color: var(--text-primary);
 }
 
 .summary-row {
@@ -195,16 +202,16 @@
     justify-content: space-between;
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
-    color: var(--gray-600);
+    color: var(--text-secondary);
 }
 
 .summary-row.total {
     font-size: 1.2rem;
     font-weight: 700;
-    color: var(--dark);
+    color: var(--text-primary);
     padding-top: 1rem;
     margin-top: 0.5rem;
-    border-top: 2px solid var(--gray-200);
+    border-top: 1px solid var(--border-color);
 }
 
 .summary-row.total span:last-child {
@@ -251,18 +258,21 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(15, 23, 42, 0.4);
+    /* Dark static slate */
     backdrop-filter: blur(4px);
 }
 
 .success-modal {
-    background: var(--white);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
     margin: 10% auto;
     padding: 3rem;
     border-radius: var(--radius-xl);
     max-width: 400px;
     text-align: center;
     animation: popIn 0.3s ease;
+    box-shadow: var(--shadow-lg);
 }
 
 @keyframes popIn {
@@ -291,19 +301,19 @@
 }
 
 .success-modal h2 {
-    color: var(--dark);
+    color: var(--text-primary);
     margin-bottom: 0.5rem;
 }
 
 .success-modal p {
-    color: var(--gray-500);
+    color: var(--text-secondary);
     margin-bottom: 0.5rem;
 }
 
 .order-number {
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--primary);
+    color: var(--primary-light);
     margin: 1rem 0;
 }
 

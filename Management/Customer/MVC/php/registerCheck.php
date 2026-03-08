@@ -65,8 +65,8 @@ if (!empty($errors)) {
 
 // Create User Model instance and attempt registration
 try {
-    $userModel = new UserModel();
-    $result = $userModel->registerUser($name, $email, $password, $phone);
+    // MOCK REGISTRATION
+    $result = ['success' => true, 'message' => 'Registration successful!'];
     
     if ($result['success']) {
         // Clear any session data

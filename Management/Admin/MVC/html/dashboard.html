@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Admin Panel</title>
     <link rel="stylesheet" href="../css/admin-style.css">
+    <script src="../../Customer/MVC/js/theme.js"></script>
 </head>
 
 <body>
@@ -43,7 +44,11 @@
         <main class="main-content">
             <header class="content-header">
                 <h1>Dashboard</h1>
-                <span class="date-display" id="currentDate"></span>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span class="date-display" id="currentDate"></span>
+                    <button class="action-btn theme-toggle" style="padding: 0.5rem 1rem; cursor: pointer;">🌙 Night
+                        Mode</button>
+                </div>
             </header>
 
             <!-- Stats Cards -->
@@ -185,7 +190,7 @@
         }
 
         function logout() {
-            window.location.href = '../../Customer/MVC/html/login.html';
+            window.location.href = '../../../Customer/MVC/html/login.html';
         }
     </script>
 </body>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Checkout API
+ * Checkout API - MOCKED for UI Testing
  * Handles order placement
  */
 
@@ -10,10 +10,10 @@ ini_set('display_errors', 0);
 
 session_start();
 
-require_once __DIR__ . '/../db/cartModel.php';
-
-// Use Customer's order model (has createOrder method)
-require_once __DIR__ . '/../db/orderModel.php';
+// Initialize mock orders in session if not exists
+if (!isset($_SESSION['mock_orders'])) {
+    $_SESSION['mock_orders'] = [];
+}
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -36,9 +36,8 @@ switch ($action) {
         }
         
         try {
-            // Get cart items
-            $cartModel = new CartModel();
-            $cartItems = $cartModel->getCartItems($userId);
+            // Get mock cart items
+            $cartItems = isset($_SESSION['mock_cart']) ? $_SESSION['mock_cart'] : [];
             
             if (empty($cartItems)) {
                 echo json_encode(['success' => false, 'message' => 'Your cart is empty']);
@@ -54,39 +53,37 @@ switch ($action) {
             $zip = isset($_POST['zip']) ? trim($_POST['zip']) : '';
             $paymentMethod = isset($_POST['payment']) ? $_POST['payment'] : 'Cash on Delivery';
             
-            // Build shipping address
-            $shippingAddress = $fullName . "\n" . $phone . "\n" . $address;
-            if ($city) $shippingAddress .= ", " . $city;
-            if ($zip) $shippingAddress .= " " . $zip;
-            
-            if (empty($address) || empty($fullName) || empty($phone)) {
+            if (empty($address) || empty($fullName) || empty($phone) || empty($email) || empty($city)) {
                 echo json_encode(['success' => false, 'message' => 'Please fill in all required fields']);
                 break;
             }
             
-            // Calculate total
-            $totalAmount = $cartModel->getCartTotal($userId);
-            
-            // Prepare order items
-            $orderItems = [];
+            // Calculate total from mock cart
+            $totalAmount = 0;
             foreach ($cartItems as $item) {
-                $orderItems[] = [
-                    'product_id' => $item['product_id'],
-                    'quantity' => $item['quantity'],
-                    'price' => $item['price']
-                ];
+                $totalAmount += $item['price'] * $item['quantity'];
             }
             
-            // Create order
-            $orderModel = new OrderModel();
-            $result = $orderModel->createOrder($userId, $totalAmount, $shippingAddress, $paymentMethod, $orderItems);
+            // Mock Order creation
+            $orderId = 'ORD-' . time();
+            $_SESSION['mock_orders'][] = [
+                'order_id' => $orderId,
+                'user_id' => $userId,
+                'total_amount' => $totalAmount,
+                'status' => 'Pending',
+                'payment_method' => $paymentMethod,
+                'items' => $cartItems,
+                'date' => date('Y-m-d H:i:s')
+            ];
             
-            if ($result['success']) {
-                // Clear cart after successful order
-                $cartModel->clearCart($userId);
-            }
+            // Clear mock cart after successful order
+            $_SESSION['mock_cart'] = [];
             
-            echo json_encode($result);
+            echo json_encode([
+                'success' => true,
+                'order_id' => $orderId,
+                'message' => 'Order placed successfully!'
+            ]);
         } catch (Exception $e) {
             echo json_encode([
                 'success' => false,

@@ -24,8 +24,12 @@ class Database {
      * Private constructor - Singleton pattern
      */
     private function __construct() {
-        // Detect if running on Railway (check for RAILWAY_ENVIRONMENT)
+        // Detect hosting environment
         $isRailway = isset($_ENV['RAILWAY_ENVIRONMENT']) || getenv('RAILWAY_ENVIRONMENT');
+        $isInfinityFree = (strpos($_SERVER['HTTP_HOST'] ?? '', 'infinityfreeapp.com') !== false) 
+                       || (strpos($_SERVER['HTTP_HOST'] ?? '', 'epizy.com') !== false)
+                       || file_exists('/home/vol') // InfinityFree server path indicator
+                       || (strpos(gethostname() ?? '', 'ifastnet') !== false);
         
         if ($isRailway) {
             // Railway internal MySQL connection
@@ -34,9 +38,16 @@ class Database {
             $this->password = 'HgjaKBquYftmzkOagsOvtEUSCkuWeDvK';
             $this->database = 'railway';
             $this->port = 3306;
+        } elseif ($isInfinityFree) {
+            // InfinityFree hosting - UPDATE THESE after creating DB in control panel
+            $this->host = 'sql300.infinityfree.com';        // Check your control panel for exact host
+            $this->username = 'if0_YOUR_USERNAME';           // Your InfinityFree DB username
+            $this->password = 'YOUR_DB_PASSWORD';            // Your InfinityFree DB password
+            $this->database = 'if0_YOUR_USERNAME_ecommerce'; // Your InfinityFree DB name
+            $this->port = 3306;
         } else {
             // Local development (XAMPP)
-            $this->host = 'localhost';
+            $this->host = '127.0.0.1';
             $this->username = 'root';
             $this->password = '';
             $this->database = 'ecommerce_db';

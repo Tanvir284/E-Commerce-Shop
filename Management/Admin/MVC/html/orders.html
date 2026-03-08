@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orders - Admin Panel</title>
     <link rel="stylesheet" href="../css/admin-style.css">
+    <script src="../../Customer/MVC/js/theme.js"></script>
 </head>
 
 <body>
@@ -43,7 +44,9 @@
         <main class="main-content">
             <header class="content-header">
                 <h1>Orders Management</h1>
-                <div class="filter-group">
+                <div class="filter-group" style="display: flex; gap: 1rem;">
+                    <button class="action-btn theme-toggle" style="padding: 0.5rem 1rem; cursor: pointer;">🌙 Night
+                        Mode</button>
                     <select id="statusFilter" onchange="filterByStatus()">
                         <option value="">All Orders</option>
                         <option value="pending">Pending</option>
@@ -220,7 +223,7 @@
         }
 
         function logout() {
-            window.location.href = '../../Customer/MVC/html/login.html';
+            window.location.href = '../../../Customer/MVC/html/login.html';
         }
     </script>
 </body>

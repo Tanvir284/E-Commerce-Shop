@@ -6,53 +6,83 @@
 /* Google Font Import */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* CSS Variables - Refined Professional Palette */
+/* CSS Variables - Clean Light & Dark Mode */
 :root {
-    /* Primary - Deep Navy & Gold */
-    --primary: #1a1a2e;
-    --primary-light: #16213e;
-    --accent: #c9a227;
-    --accent-light: #d4af37;
-    --accent-muted: rgba(201, 162, 39, 0.1);
+    /* Primary Accents */
+    --primary: #2563eb;
+    /* Professional Blue */
+    --primary-light: #3b82f6;
+    --primary-dark: #1d4ed8;
 
-    /* Clean Neutrals */
-    --white: #ffffff;
-    --off-white: #fafafa;
-    --gray-50: #f8f9fa;
-    --gray-100: #f1f3f4;
-    --gray-200: #e8eaed;
-    --gray-300: #dadce0;
-    --gray-400: #bdc1c6;
-    --gray-500: #9aa0a6;
-    --gray-600: #80868b;
-    --gray-700: #5f6368;
-    --gray-800: #3c4043;
-    --gray-900: #202124;
-    --black: #0a0a0a;
+    --accent: #14b8a6;
+    /* Clean Teal */
+    --accent-light: #2dd4bf;
+
+    /* Light Mode Neutrals (Default) */
+    --bg-main: #f8fafc;
+    /* Off-white background */
+    --bg-secondary: #ffffff;
+    /* Pure white cards */
+    --bg-tertiary: #f1f5f9;
+    /* Hover state backgrounds */
+
+    /* Text Colors - Light Mode */
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+
+    /* Borders */
+    --border-color: #e2e8f0;
+    --border-highlight: #cbd5e1;
+
+    /* Shadows - Clean & Structural */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
 
     /* Semantic Colors */
-    --success: #1e8e3e;
-    --warning: #f9ab00;
-    --error: #d93025;
-    --info: #1a73e8;
-
-    /* Professional Shadows */
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
-    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.12);
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --info: #3b82f6;
 
     /* Border Radius */
-    --radius-sm: 4px;
+    --radius-sm: 6px;
     --radius: 8px;
     --radius-lg: 12px;
     --radius-xl: 16px;
+    --radius-full: 9999px;
 
     /* Transitions */
-    --transition-fast: all 0.15s ease;
-    --transition: all 0.25s ease;
-    --transition-slow: all 0.4s ease;
+    --transition-fast: all 0.15s ease-in-out;
+    --transition: all 0.25s ease-in-out;
+    --transition-slow: all 0.4s ease-in-out;
+}
+
+/* Dark Mode Overrides */
+[data-theme="dark"] {
+    /* Dark Mode Neutrals */
+    --bg-main: #0f172a;
+    /* Slate 900 */
+    --bg-secondary: #1e293b;
+    /* Slate 800 */
+    --bg-tertiary: #334155;
+    /* Slate 700 */
+
+    /* Text Colors - Dark Mode */
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+
+    /* Borders */
+    --border-color: #334155;
+    --border-highlight: #475569;
+
+    /* Shadows adapted for dark mode */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
 }
 
 /* Reset & Base */
@@ -72,17 +102,17 @@ html {
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--off-white);
-    color: var(--gray-900);
+    background: var(--bg-main);
+    color: var(--text-primary);
     line-height: 1.6;
     min-height: 100vh;
     font-size: 15px;
-    letter-spacing: -0.01em;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 ::selection {
-    background: var(--accent);
-    color: var(--white);
+    background: var(--primary);
+    color: var(--text-primary);
 }
 
 a {
@@ -94,11 +124,13 @@ a {
    HEADER - Clean Professional
 ============================================== */
 .header {
-    background: var(--white);
-    border-bottom: 1px solid var(--gray-200);
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
     z-index: 100;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    box-shadow: var(--shadow-sm);
 }
 
 .header-container {
@@ -116,23 +148,29 @@ a {
 .logo {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 20px;
-    font-weight: 700;
+    gap: 12px;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, var(--primaryLight), var(--accent));
+    text-transform: uppercase;
+}
+
+.logo span {
     color: var(--primary);
-    letter-spacing: -0.02em;
 }
 
 .logo-icon {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     background: var(--primary);
-    border-radius: var(--radius);
+    border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--accent);
-    font-size: 18px;
+    color: #fff;
+    font-size: 20px;
 }
 
 /* Search Bar */
@@ -144,24 +182,25 @@ a {
 
 .search-bar input {
     width: 100%;
-    height: 44px;
-    padding: 0 48px 0 16px;
-    border: 1px solid var(--gray-300);
-    border-radius: var(--radius);
-    font-size: 14px;
-    background: var(--gray-50);
-    transition: var(--transition-fast);
+    height: 46px;
+    padding: 0 48px 0 20px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    color: var(--text-primary);
+    font-size: 15px;
+    transition: var(--transition);
 }
 
 .search-bar input::placeholder {
-    color: var(--gray-500);
+    color: var(--text-muted);
 }
 
 .search-bar input:focus {
     outline: none;
     border-color: var(--primary);
-    background: var(--white);
-    box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.08);
+    background: var(--bg-secondary);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
 }
 
 .search-bar button {
@@ -188,29 +227,29 @@ a {
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
 }
 
 .nav-link {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 10px 14px;
-    color: var(--gray-700);
+    gap: 8px;
+    padding: 10px 16px;
+    color: var(--text-secondary);
     font-size: 14px;
     font-weight: 500;
-    border-radius: var(--radius);
-    transition: var(--transition-fast);
+    border-radius: var(--radius-full);
+    transition: var(--transition);
 }
 
 .nav-link:hover {
-    color: var(--primary);
-    background: var(--gray-100);
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
 }
 
 .nav-link.active {
     color: var(--primary);
-    background: var(--accent-muted);
+    background: rgba(37, 99, 235, 0.1);
 }
 
 .cart-link,
@@ -227,7 +266,7 @@ a {
     height: 18px;
     padding: 0 5px;
     background: var(--accent);
-    color: var(--primary);
+    color: #fff;
     font-size: 11px;
     font-weight: 600;
     border-radius: 9px;
@@ -255,10 +294,11 @@ a {
 }
 
 /* ==============================================
-   HERO SECTION - Elegant Dark
+   HERO SECTION - Elegant Clean
 ============================================== */
 .hero {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
     padding: 80px 24px;
     text-align: center;
     color: var(--white);
@@ -388,17 +428,18 @@ a {
 
 /* Product Card */
 .product-card {
-    background: var(--white);
-    border-radius: var(--radius-lg);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-xl);
     overflow: hidden;
-    border: 1px solid var(--gray-200);
+    border: 1px solid var(--border-color);
     transition: var(--transition);
     position: relative;
+    box-shadow: var(--shadow-sm);
 }
 
 .product-card:hover {
-    border-color: var(--gray-300);
-    box-shadow: var(--shadow-lg);
+    border-color: var(--border-highlight);
+    box-shadow: var(--shadow-md);
     transform: translateY(-4px);
 }
 
@@ -418,7 +459,7 @@ a {
 .product-image-wrapper {
     position: relative;
     padding-top: 100%;
-    background: var(--gray-100);
+    background: transparent;
     overflow: hidden;
 }
 
@@ -443,16 +484,17 @@ a {
     left: 12px;
     right: 12px;
     height: 42px;
-    background: var(--primary);
-    color: var(--white);
-    border: none;
+    background: var(--bg-secondary);
+    color: var(--primary);
+    border: 1px solid var(--border-color);
     border-radius: var(--radius);
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     opacity: 0;
     transform: translateY(8px);
     transition: var(--transition);
+    box-shadow: var(--shadow-sm);
 }
 
 .product-card:hover .quick-add {
@@ -461,7 +503,9 @@ a {
 }
 
 .quick-add:hover {
-    background: var(--primary-light);
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
 }
 
 .product-details {
@@ -471,16 +515,16 @@ a {
 .product-category {
     font-size: 12px;
     font-weight: 500;
-    color: var(--gray-500);
+    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: 6px;
 }
 
 .product-name {
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--gray-900);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
     line-height: 1.4;
     margin-bottom: 8px;
     display: -webkit-box;
@@ -498,13 +542,13 @@ a {
 }
 
 .stars {
-    color: var(--accent);
+    color: var(--warning);
     font-size: 13px;
     letter-spacing: 1px;
 }
 
 .rating-count {
-    color: var(--gray-500);
+    color: var(--text-muted);
     font-size: 13px;
 }
 
@@ -515,14 +559,14 @@ a {
 }
 
 .current-price {
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--gray-900);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
 }
 
 .original-price {
     font-size: 14px;
-    color: var(--gray-500);
+    color: var(--text-muted);
     text-decoration: line-through;
 }
 
@@ -545,10 +589,10 @@ a {
     bottom: 24px;
     right: 24px;
     padding: 14px 20px;
-    background: var(--gray-900);
-    color: var(--white);
+    background: var(--text-primary);
+    color: var(--bg-main);
     border-radius: var(--radius);
-    box-shadow: var(--shadow-xl);
+    box-shadow: var(--shadow-lg);
     transform: translateY(100px);
     opacity: 0;
     transition: var(--transition);
@@ -574,8 +618,9 @@ a {
    FOOTER - Professional Dark
 ============================================== */
 .footer {
-    background: var(--gray-900);
-    color: var(--white);
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--glass-border);
+    color: var(--text-secondary);
     padding: 64px 24px 32px;
     margin-top: 80px;
 }

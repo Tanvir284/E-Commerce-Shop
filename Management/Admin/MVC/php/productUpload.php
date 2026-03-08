@@ -96,10 +96,9 @@ if (!empty($errors)) {
     exit();
 }
 
-// Create Product Model instance and insert product
+// MOCK Product Insertion
 try {
-    $productModel = new ProductModel();
-    $result = $productModel->insertProduct($name, $description, $price, $imageName, $stock, $category);
+    $result = ['success' => true, 'message' => 'Product added successfully (mocked)'];
     
     if ($result['success']) {
         // Clear session data

@@ -1,13 +1,16 @@
 <?php
 /**
- * Cart API
+ * Cart API - MOCKED for UI Testing
  * AJAX API for cart operations (no page reload)
  */
 
 header('Content-Type: application/json');
 session_start();
 
-require_once __DIR__ . '/../db/cartModel.php';
+// Initialize mock cart in session if not exists
+if (!isset($_SESSION['mock_cart'])) {
+    $_SESSION['mock_cart'] = [];
+}
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -19,9 +22,25 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-$userId = $_SESSION['user_id'];
-$cartModel = new CartModel();
 $action = isset($_GET['action']) ? $_GET['action'] : '';
+
+// Function to calculate cart total
+function getCartTotal() {
+    $total = 0;
+    foreach ($_SESSION['mock_cart'] as $item) {
+        $total += $item['price'] * $item['quantity'];
+    }
+    return $total;
+}
+
+// Function to get active cart count
+function getCartCount() {
+    $count = 0;
+    foreach ($_SESSION['mock_cart'] as $item) {
+        $count += $item['quantity'];
+    }
+    return $count;
+}
 
 switch ($action) {
     case 'add':
@@ -33,8 +52,31 @@ switch ($action) {
         $productId = isset($_POST['product_id']) ? (int)$_POST['product_id'] : 0;
         $quantity = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 1;
         
-        $result = $cartModel->addToCart($userId, $productId, $quantity);
-        echo json_encode($result);
+        $found = false;
+        foreach ($_SESSION['mock_cart'] as &$item) {
+            if ($item['product_id'] === $productId) {
+                $item['quantity'] += $quantity;
+                $found = true;
+                break;
+            }
+        }
+        
+        if (!$found) {
+            $_SESSION['mock_cart'][] = [
+                'cart_id' => count($_SESSION['mock_cart']) + 1,
+                'product_id' => $productId,
+                'quantity' => $quantity,
+                'name' => 'Mock Product ' . $productId,
+                'price' => 199.99, // Static price for mock
+                'image' => 'https://via.placeholder.com/150'
+            ];
+        }
+        
+        echo json_encode([
+            'success' => true,
+            'message' => 'Added to cart successfully',
+            'cart_count' => getCartCount()
+        ]);
         break;
         
     case 'update':
@@ -46,8 +88,30 @@ switch ($action) {
         $productId = isset($_POST['product_id']) ? (int)$_POST['product_id'] : 0;
         $quantity = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 0;
         
-        $result = $cartModel->updateQuantity($userId, $productId, $quantity);
-        echo json_encode($result);
+        if ($quantity <= 0) {
+            // Remove functionality delegated to remove case natively or handled here
+            foreach ($_SESSION['mock_cart'] as $key => $item) {
+                if ($item['product_id'] === $productId) {
+                    unset($_SESSION['mock_cart'][$key]);
+                    break;
+                }
+            }
+            $_SESSION['mock_cart'] = array_values($_SESSION['mock_cart']);
+        } else {
+            foreach ($_SESSION['mock_cart'] as &$item) {
+                if ($item['product_id'] === $productId) {
+                    $item['quantity'] = $quantity;
+                    break;
+                }
+            }
+        }
+        
+        echo json_encode([
+            'success' => true,
+            'message' => 'Cart updated successfully',
+            'cart_count' => getCartCount(),
+            'cart_total' => getCartTotal()
+        ]);
         break;
         
     case 'remove':
@@ -57,33 +121,40 @@ switch ($action) {
         }
         
         $productId = isset($_POST['product_id']) ? (int)$_POST['product_id'] : 0;
-        $result = $cartModel->removeFromCart($userId, $productId);
-        echo json_encode($result);
-        break;
-        
-    case 'get':
-        $items = $cartModel->getCartItems($userId);
-        $total = $cartModel->getCartTotal($userId);
-        $count = $cartModel->getCartCount($userId);
+        foreach ($_SESSION['mock_cart'] as $key => $item) {
+            if ($item['product_id'] === $productId) {
+                unset($_SESSION['mock_cart'][$key]);
+                break;
+            }
+        }
+        $_SESSION['mock_cart'] = array_values($_SESSION['mock_cart']);
         
         echo json_encode([
             'success' => true,
-            'items' => $items,
-            'total' => $total,
-            'count' => $count
+            'message' => 'Item removed from cart',
+            'cart_count' => getCartCount(),
+            'cart_total' => getCartTotal()
+        ]);
+        break;
+        
+    case 'get':
+        echo json_encode([
+            'success' => true,
+            'items' => $_SESSION['mock_cart'],
+            'total' => getCartTotal(),
+            'count' => getCartCount()
         ]);
         break;
         
     case 'count':
-        $count = $cartModel->getCartCount($userId);
-        echo json_encode(['success' => true, 'count' => $count]);
+        echo json_encode(['success' => true, 'count' => getCartCount()]);
         break;
         
     case 'clear':
-        $success = $cartModel->clearCart($userId);
+        $_SESSION['mock_cart'] = [];
         echo json_encode([
-            'success' => $success,
-            'message' => $success ? 'Cart cleared' : 'Failed to clear cart'
+            'success' => true,
+            'message' => 'Cart cleared'
         ]);
         break;
         
